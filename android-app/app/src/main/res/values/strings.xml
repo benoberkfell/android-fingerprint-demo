@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">FingerprintDemo</string>
+    <string name="fingerprint_hardware_present">Fingerprint Hardware Present</string>
+    <string name="fingerprint_hardware_not_present">Fingerprint Hardware Not Present</string>
+    <string name="fingerprint_enrolled">Fingerprint(s) Enrolled</string>
+    <string name="fingerprint_not_enrolled">No Fingerprint(s) Enrolled, Please Go Do That</string>
+
+    <string name="register_fingerprint">Register</string>
+    <string name="authenticate_fingerprint">Authenticate</string>
+
+
+    <string name="fingerprint_description">Confirm fingerprint to continue</string>
+    <string name="fingerprint_hint">Touch sensor</string>
+    <string name="fingerprint_not_recognized">Fingerprint not recognized</string>
+
+    <string name="make_a_purchase">Make a Purchase</string>
+
+    <string name="fingerprint_success">Success!</string>
+</resources>
