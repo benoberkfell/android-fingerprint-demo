@@ -77,7 +77,7 @@ in the room you probably don't need any further convincing from me.
 
 ^You've seen how Google Play requests a fingerprint before making a purchase. 
 
-How many of you have had your kids accidentally buy something?  Fingerprint helps!
+^How many of you have had your kids accidentally buy something?  Fingerprint helps!
 
 ---
 
@@ -549,10 +549,10 @@ guidelines to ensure a consistent experience.
 
 ---
 
-# Important to know
+# Consistency is Important
 
-* Use the phrase "confirm fingerprint." It's what's used elsewhere.
-* Take the error messages from Android for consistency sake.
+* Use the phrase "Confirm fingerprint." 
+* Take the error messages from Android unless you have a good reason not to.
 * Users will be told to expect the fingerprint symbol. Display it as a standard icon (40dp circle with 24dp image). 
 
 ---
