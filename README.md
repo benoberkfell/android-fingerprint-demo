@@ -3,6 +3,8 @@
 Here's my sample app and backend from the _Android Fingerprint Authentication In Action_ talk presented at 
 Windy City DevCon and Droidcon NYC 2016.
 
+[Slides are here](https://raw.githubusercontent.com/benoberkfell/android-fingerprint-demo/master/presentation/presentation.pdf)
+
 ## What's in here?
 
 * A sample Android app that demonstrates fingerprint scanning and posting signed requests against a backend.
