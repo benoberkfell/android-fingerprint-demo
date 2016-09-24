@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 public class SharedPrefHelper {
 
-    private static final String HAS_ENROLLED_KEY = "hasEnrolled";
+    private static final String HAS_ENROLLED_KEY = "HAS_ENROLLED";
     private static final String TOKEN_KEY = "token";
 
     private final SharedPreferences prefs;
@@ -19,11 +19,11 @@ public class SharedPrefHelper {
         prefs = application.getSharedPreferences("enrollmentPrefs", Context.MODE_PRIVATE);
     }
 
-    public boolean hasEnrolled() {
+    public boolean hasRegisteredFingerprintsWithBackend() {
         return prefs.getBoolean(HAS_ENROLLED_KEY, false);
     }
 
-    public void setHasEnrolled(boolean value) {
+    public void setHasRegisteredFingerprintsWithBackend(boolean value) {
         prefs.edit().putBoolean(HAS_ENROLLED_KEY, value).apply();
     }
 

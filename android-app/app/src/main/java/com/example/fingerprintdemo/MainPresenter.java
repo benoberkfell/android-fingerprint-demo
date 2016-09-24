@@ -1,5 +1,6 @@
 package com.example.fingerprintdemo;
 
+import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.util.Base64;
@@ -37,11 +38,12 @@ public class MainPresenter  {
 
     private View view;
 
-    @Inject public MainPresenter(FingerprintManagerCompat fingerprintManager,
-                                 CryptoHelper cryptoHelper,
-                                 StoreService storeService,
-                                 SharedPrefHelper sharedPrefHelper,
-                                 @Named("InstanceId") String deviceId) {
+    @Inject
+    MainPresenter(FingerprintManagerCompat fingerprintManager,
+                  CryptoHelper cryptoHelper,
+                  StoreService storeService,
+                  SharedPrefHelper sharedPrefHelper,
+                  @Named("InstanceId") String deviceId) {
 
         this.fingerprintManager = fingerprintManager;
         this.cryptoHelper = cryptoHelper;
@@ -54,8 +56,29 @@ public class MainPresenter  {
         this.view = view;
     }
 
-    public void onResume() {
-        updateViewState();
+    public void onReady() {
+        if (Build.VERSION.SDK_INT < M) {
+            view.presentMessageDialog("Sorry", "You're not on Android M or better. This demo's not going to be that fun.");
+        } else {
+
+            if (!fingerprintManager.isHardwareDetected()) {
+                view.presentMessageDialog("Sorry", "No fingerprint hardware detected. This demo's not too fun that way.");
+                return;
+            }
+
+            if (!fingerprintManager.hasEnrolledFingerprints()) {
+                view.presentMessageDialog("Enroll Fingerprints",
+                        "You don't have any fingerprints enrolled.\n\n" +
+                                "Please go do that first."
+                );
+
+                return;
+            }
+
+            if (!sharedPrefHelper.hasRegisteredFingerprintsWithBackend()) {
+                registerFingerprintWithBackend();
+            }
+        }
     }
 
     @RequiresApi(M)
@@ -86,9 +109,9 @@ public class MainPresenter  {
                     @Override
                     public void onResponse(Call<EnrollmentResponse> call, Response<EnrollmentResponse> response) {
                         if (response.isSuccessful()) {
-                            sharedPrefHelper.setHasEnrolled(true);
+                            sharedPrefHelper.setHasRegisteredFingerprintsWithBackend(true);
                             sharedPrefHelper.setToken(response.body().getToken());
-                            view.presentMessageDialog("Success", "Token is " + response.body().getToken());
+                            view.presentMessageDialog("Success", "You've successfully enabled your fingerprint for purchases.");
                         } else {
                             view.presentMessageDialog("Error", "An error occurred registering the fingerprint.");
                         }
@@ -105,74 +128,59 @@ public class MainPresenter  {
         view.presentFingerprintAuth("Enroll Fingerprint", signature, callback);
     }
 
-    @RequiresApi(M)
-    public void placeOrderWithFingerprintAuth() {
-        Signature signature;
-        try {
-            signature = cryptoHelper.getSignature();
-        } catch (InvalidKeyException e) {
-            view.presentMessageDialog("Security Error",
-                    "Either the lockscreen was disabled or new fingerprints were added. " +
-                            "You must re-enroll your fingerprint.");
-            return;
-        }
+    public void placeOrder() {
+        if (canUseFingerprints()) {
+            Signature signature;
+            try {
+                signature = cryptoHelper.getSignature();
+            } catch (InvalidKeyException e) {
+                view.presentMessageDialog("Security Error",
+                        "Either the lockscreen was disabled or new fingerprints were added. " +
+                                "You must re-enroll your fingerprint.");
+                return;
+            }
 
-        final Purchase purchase = new Purchase(
-                "Taco",
-                "742 Evergreen Terrace",
-                sharedPrefHelper.getToken());
+            final Purchase purchase = new Purchase(
+                    "Twice Baked Potato",
+                    "742 Evergreen Terrace",
+                    sharedPrefHelper.getToken());
 
-        AuthenticationCallback callback = new AuthenticationCallback() {
-            @Override
-            public void onAuthenticated(Signer signer) {
-                SignedRequest<Purchase> request = new SignedRequest<>(purchase, signer);
-                storeService.makePurchase(request).enqueue(new Callback<PurchaseResponse>() {
-                    @Override
-                    public void onResponse(Call<PurchaseResponse> call, Response<PurchaseResponse> response) {
-                        if (response.isSuccessful()) {
-                            view.presentMessageDialog("Success", response.body().getConfirmationMessage());
-                        } else {
+            AuthenticationCallback callback = new AuthenticationCallback() {
+                @Override
+                public void onAuthenticated(Signer signer) {
+                    SignedRequest<Purchase> request = new SignedRequest<>(purchase, signer);
+                    storeService.makePurchase(request).enqueue(new Callback<PurchaseResponse>() {
+                        @Override
+                        public void onResponse(Call<PurchaseResponse> call, Response<PurchaseResponse> response) {
+                            if (response.isSuccessful()) {
+                                view.presentMessageDialog("Success", response.body().getConfirmationMessage());
+                            } else {
+                                view.presentMessageDialog("Error", "An error occurred making the purchase.");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PurchaseResponse> call, Throwable t) {
                             view.presentMessageDialog("Error", "An error occurred making the purchase.");
                         }
-                    }
+                    });
+                }
+            };
 
-                    @Override
-                    public void onFailure(Call<PurchaseResponse> call, Throwable t) {
-                        view.presentMessageDialog("Error", "An error occurred making the purchase.");
-                    }
-                });
-            }
-        };
-
-        view.presentFingerprintAuth("Make a Purchase", signature, callback);
+            view.presentFingerprintAuth("Make a Purchase", signature, callback);
+        } else {
+            view.presentMessageDialog("Sorry", "We'd use this with fingerprint auth here if you had the ability to do so.");
+        }
     }
 
-    private void updateViewState() {
-        if (fingerprintManager.isHardwareDetected()) {
-            view.hardwareDetectedText("Fingerprint hardware is present!");
-            view.shouldShowFingerprintEnrollmentStatusText(true);
-        } else {
-            view.hardwareDetectedText("No fingerprint hardware");
-            view.shouldShowFingerprintEnrollmentStatusText(false);
-        }
 
-        if (fingerprintManager.hasEnrolledFingerprints()) {
-            view.fingerprintEnrollmentStatusText("Fingerprint(s) enrolled!");
-            view.shouldShowFingerprintButtons(true);
-        } else {
-            view.fingerprintEnrollmentStatusText("Please enable fingerprint auth first");
-            view.shouldShowFingerprintButtons(false);
-        }
-
-        view.shouldShowAuthButton(sharedPrefHelper.hasEnrolled());
+    private boolean canUseFingerprints() {
+        return (Build.VERSION.SDK_INT > M
+                && fingerprintManager.hasEnrolledFingerprints()
+                && fingerprintManager.isHardwareDetected());
     }
 
     public interface View {
-        void hardwareDetectedText(String text);
-        void fingerprintEnrollmentStatusText(String text);
-        void shouldShowFingerprintEnrollmentStatusText(boolean value);
-        void shouldShowFingerprintButtons(boolean value);
-        void shouldShowAuthButton(boolean value);
         void presentFingerprintAuth(String dialogTitle, Signature signature, AuthenticationCallback callback);
         void presentMessageDialog(String title, String message);
     }

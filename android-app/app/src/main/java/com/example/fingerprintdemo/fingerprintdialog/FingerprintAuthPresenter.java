@@ -33,7 +33,7 @@ public class FingerprintAuthPresenter {
             public void onAuthenticationError(int errMsgId, CharSequence errString) {
                 super.onAuthenticationHelp(errMsgId, errString);
                 if (!canceled) {
-                    fingerprintView.onError(errString.toString());
+                    fingerprintView.onError(errString.toString(), true);
                 }
             }
 
@@ -41,7 +41,7 @@ public class FingerprintAuthPresenter {
             public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
                 super.onAuthenticationHelp(helpMsgId, helpString);
                 if (!canceled) {
-                    fingerprintView.onError(helpString.toString());
+                    fingerprintView.onError(helpString.toString(), false);
                 }
             }
 
@@ -70,7 +70,7 @@ public class FingerprintAuthPresenter {
     interface FingerprintView {
         CryptoObject cryptoObject();
         void onSuccess(CryptoObject cryptoObject);
-        void onError(String errorString);
+        void onError(String errorString, boolean isHardError);
         void onError(int errorStringRes);
     }
 }
