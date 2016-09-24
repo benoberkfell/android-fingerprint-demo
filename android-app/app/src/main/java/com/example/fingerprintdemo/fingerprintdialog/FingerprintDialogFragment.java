@@ -1,5 +1,6 @@
 package com.example.fingerprintdemo.fingerprintdialog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
@@ -86,6 +87,12 @@ public class FingerprintDialogFragment extends DialogFragment implements Fingerp
     }
 
     @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        fingerprintIconImageView.removeCallbacks(resetFingerprintHint);
+    }
+
+    @Override
     public FingerprintManagerCompat.CryptoObject cryptoObject() {
         return new FingerprintManagerCompat.CryptoObject(signature);
     }
@@ -111,19 +118,21 @@ public class FingerprintDialogFragment extends DialogFragment implements Fingerp
     }
 
     @Override
-    public void onError(String errorString) {
+    public void onError(String errorString, boolean isHardError) {
         fingerprintIconImageView.removeCallbacks(resetFingerprintHint);
 
         fingerprintStatusTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.warning_color));
         fingerprintStatusTextView.setText(errorString);
         fingerprintIconImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_fingerprint_error));
 
-        fingerprintIconImageView.postDelayed(resetFingerprintHint, ERROR_TIMEOUT_MS);
+        if (!isHardError) {
+            fingerprintIconImageView.postDelayed(resetFingerprintHint, ERROR_TIMEOUT_MS);
+        }
     }
 
     @Override
     public void onError(int errorStringRes) {
-        onError(getString(errorStringRes));
+        onError(getString(errorStringRes), false);
     }
 
     public void setCallback(Callback callback) {
@@ -141,9 +150,11 @@ public class FingerprintDialogFragment extends DialogFragment implements Fingerp
     Runnable resetFingerprintHint = new Runnable() {
         @Override
         public void run() {
-            fingerprintStatusTextView.setText(R.string.fingerprint_hint);
-            fingerprintIconImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_fp_40px));
-            fingerprintStatusTextView.setTextColor(ContextCompat.getColor(getActivity(),R.color.hint_color));
+            if (FingerprintDialogFragment.this.isVisible()) {
+                fingerprintStatusTextView.setText(R.string.fingerprint_hint);
+                fingerprintIconImageView.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_fp_40px));
+                fingerprintStatusTextView.setTextColor(ContextCompat.getColor(getActivity(), R.color.hint_color));
+            }
         }
     };
 }

@@ -1,5 +1,11 @@
 <resources>
-    <string name="app_name">FingerprintDemo</string>
+    <string name="app_name">Tuber</string>
+    <string name="twice_baked_potato">Twice Baked Potato</string>
+    <string name="twice_baked_potato_price">$4.99</string>
+    <string name="twice_baked_potato_description">Tap to order our special potato of the day.
+    It\'s delivered piping hot, straight to your door in 30 minutes or less.</string>
+    <string name="our_menu">Our Menu</string>
+
     <string name="fingerprint_hardware_present">Fingerprint Hardware Present</string>
     <string name="fingerprint_hardware_not_present">Fingerprint Hardware Not Present</string>
     <string name="fingerprint_enrolled">Fingerprint(s) Enrolled</string>
