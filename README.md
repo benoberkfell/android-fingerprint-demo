@@ -3,7 +3,8 @@
 Here's my sample app and backend from the _Android Fingerprint Authentication In Action_ talk presented at 
 Windy City DevCon and Droidcon NYC 2016.
 
-[Slides are here](https://raw.githubusercontent.com/benoberkfell/android-fingerprint-demo/master/presentation/presentation.pdf)
+* [Slides are here](https://raw.githubusercontent.com/benoberkfell/android-fingerprint-demo/master/presentation/droidcon-talk.pdf)
+* [Keynote version with video content](https://raw.githubusercontent.com/benoberkfell/android-fingerprint-demo/master/presentation/droidcon-talk.key)
 
 ## What's in here?
 
