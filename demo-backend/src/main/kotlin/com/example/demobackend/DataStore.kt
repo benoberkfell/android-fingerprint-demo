@@ -12,12 +12,12 @@ class DataStore {
 
     fun enrollDevice(username: String, deviceId: String, publicKey: String) : Enrollment {
         val enrollment = Enrollment(UUID.randomUUID().toString(), publicKey, username, deviceId)
-        enrollments.put(enrollment.token, enrollment)
+        enrollments[enrollment.token] = enrollment
         return enrollment
     }
 
     fun publicKeyForEnrolledDevice(token: String) : String? {
-        return enrollments.get(token)?.publicKey
+        return enrollments[token]?.publicKey
     }
 
     class Enrollment(val token: String, val publicKey: String, val username: String, val deviceId: String)

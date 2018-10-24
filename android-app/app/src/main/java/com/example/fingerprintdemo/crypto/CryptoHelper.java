@@ -1,6 +1,5 @@
 package com.example.fingerprintdemo.crypto;
 
-
 import android.annotation.TargetApi;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
@@ -100,8 +99,6 @@ public class CryptoHelper {
             throw new RuntimeException("Failed to get public key", e);
         }
     }
-
-
 
     public Signature getSignature() throws InvalidKeyException {
         Signature signature;

@@ -1,8 +1,6 @@
 package com.example.fingerprintdemo;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.util.Base64;
 
 import com.example.fingerprintdemo.crypto.CryptoHelper;
@@ -22,6 +20,8 @@ import java.security.Signature;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

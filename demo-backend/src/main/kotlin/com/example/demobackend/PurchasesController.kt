@@ -13,21 +13,21 @@ class PurchasesController {
     val dataStore = DataStore.instance()
     val helper = SignatureHelper<Purchase>()
 
-    @RequestMapping(path = arrayOf("/purchases"), method = arrayOf(RequestMethod.POST))
+    @RequestMapping(path = ["/purchases"], method = [RequestMethod.POST])
     fun purchase(@RequestBody signedRequest: SignedRequest<Purchase>): ResponseEntity<PurchaseResponse> {
         val purchase = signedRequest.payload
 
         val key = dataStore.publicKeyForEnrolledDevice(purchase.token)
 
-        if (key != null
-                && helper.isRequestValidlyStamped(signedRequest)
-                && helper.isRequestValidlySigned(signedRequest, key)) {
+        return if (key != null
+            && helper.isRequestValidlyStamped(signedRequest)
+            && helper.isRequestValidlySigned(signedRequest, key)) {
             val response = PurchaseResponse("Thank you for ordering a ${purchase.itemName}, we will send it to "
-            + "${purchase.deliveryAddress} right away.")
+                    + "${purchase.deliveryAddress} right away.")
 
-            return ResponseEntity(response, HttpStatus.OK)
+            ResponseEntity(response, HttpStatus.OK)
         } else {
-            return ResponseEntity(HttpStatus.FORBIDDEN)
+            ResponseEntity(HttpStatus.FORBIDDEN)
         }
     }
 }
