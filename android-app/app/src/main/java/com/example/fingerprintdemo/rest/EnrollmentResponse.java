@@ -1,6 +1,5 @@
 package com.example.fingerprintdemo.rest;
 
-
 public class EnrollmentResponse {
     private String token;
 

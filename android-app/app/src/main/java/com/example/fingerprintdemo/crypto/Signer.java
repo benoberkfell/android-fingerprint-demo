@@ -1,20 +1,21 @@
 package com.example.fingerprintdemo.crypto;
 
-import android.support.annotation.RequiresApi;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat.CryptoObject;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+
 import static android.os.Build.VERSION_CODES.M;
 
 public class Signer {
 
-    private final CryptoObject cryptoObject;
+    private final FingerprintManagerCompat.CryptoObject cryptoObject;
 
     @RequiresApi(M)
-    public Signer(CryptoObject cryptoObject) {
+    public Signer(FingerprintManagerCompat.CryptoObject cryptoObject) {
         this.cryptoObject = cryptoObject;
     }
 

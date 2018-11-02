@@ -15,7 +15,6 @@ public interface ApplicationComponent {
     SharedPrefHelper sharedPrefHelper();
     @Named("InstanceId") String instanceId();
 
-
     void inject(MainActivity mainActivity);
     void inject(FingerprintDialogFragment fingerprintDialogFragment);
 }

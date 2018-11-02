@@ -1,6 +1,5 @@
 package com.example.fingerprintdemo.injects;
 
-
 import com.example.fingerprintdemo.FingerprintDemoApplication;
 
 public class Injector {

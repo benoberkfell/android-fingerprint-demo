@@ -1,12 +1,11 @@
 package com.example.fingerprintdemo.fingerprintdialog;
 
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat.CryptoObject;
-import android.support.v4.os.CancellationSignal;
-
 import com.example.fingerprintdemo.R;
 
 import javax.inject.Inject;
+
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.core.os.CancellationSignal;
 
 public class FingerprintAuthPresenter {
 
@@ -68,8 +67,8 @@ public class FingerprintAuthPresenter {
 
 
     interface FingerprintView {
-        CryptoObject cryptoObject();
-        void onSuccess(CryptoObject cryptoObject);
+        FingerprintManagerCompat.CryptoObject cryptoObject();
+        void onSuccess(FingerprintManagerCompat.CryptoObject cryptoObject);
         void onError(String errorString, boolean isHardError);
         void onError(int errorStringRes);
     }

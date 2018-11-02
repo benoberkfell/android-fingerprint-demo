@@ -2,10 +2,10 @@ package com.example.fingerprintdemo.injects;
 
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 
 import com.example.fingerprintdemo.FingerprintDemoApplication;
 
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import dagger.Module;
 import dagger.Provides;
 

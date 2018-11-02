@@ -3,9 +3,6 @@ package com.example.fingerprintdemo.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.example.fingerprintdemo.MainPresenter;
 import com.example.fingerprintdemo.R;
@@ -18,6 +15,9 @@ import java.security.Signature;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
